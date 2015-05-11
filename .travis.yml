@@ -169,10 +169,14 @@ install:
   - if [ "$BUILD_TYPE" == "Debug" ]; then make debug CXXFLAGS="${CXX_FLAGS} ${CXX_LINKER_FLAGS}" VERBOSE=1; fi
 
 script:
-  - ./example
-  - ./bench
-  - valgrind --trace-children=yes --leak-check=full ./example
-  - valgrind --trace-children=yes --leak-check=full ./bench
+  - if [ "$BUILD_TYPE" == "Release" ]; then ./example; fi
+  - if [ "$BUILD_TYPE" == "Release" ]; then  ./bench; fi
+  - if [ "$BUILD_TYPE" == "Release" ]; then  valgrind --trace-children=yes --leak-check=full ./example; fi
+  - if [ "$BUILD_TYPE" == "Release" ]; then  valgrind --trace-children=yes --leak-check=full ./bench; fi
+  - if [ "$BUILD_TYPE" == "Debug" ]; then ./example-debug; fi
+  - if [ "$BUILD_TYPE" == "Debug" ]; then  ./bench-debug; fi
+  - if [ "$BUILD_TYPE" == "Debug" ]; then  valgrind --trace-children=yes --leak-check=full ./example-debug; fi
+  - if [ "$BUILD_TYPE" == "Debug" ]; then  valgrind --trace-children=yes --leak-check=full ./bench-debug; fi
 
 notifications:
   email: false
